@@ -1,0 +1,45 @@
+<idea-plugin require-restart="true">
+  <id>servicestack-rider</id>
+  <name>ServiceStack</name>
+  <vendor url="https://project-url">Author</vendor>
+  <idea-version since-build="192" until-build="212.*" />
+  <depends>com.intellij.modules.rider</depends>
+
+  <description>
+<![CDATA[
+<p>Sample description</p>
+]]>
+  </description>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <intentionAction>
+      <className>net.servicestack.idea.UpdateServiceStackReferenceIntention</className>
+    </intentionAction>
+
+    <applicationService serviceImplementation="net.servicestack.idea.common.PluginSettingsService"
+                        id="ServiceStackIDEASettingsService" />
+
+    <applicationConfigurable groupId="ServiceStackIDEA"
+                             displayName="ServiceStack"
+                             id="ServiceStackIDEAConfig"
+                             instance="net.servicestack.idea.common.PluginSettingsConfigurable" />
+  </extensions>
+
+  <actions>
+    <action id="AddTypeScriptReference" class="net.servicestack.idea.common.AddTypeScriptAction" text="TypeScript Reference..." icon="/servicestack.svg"
+            description="Adds a ServiceStack TypeScript reference to the selected folder">
+      <!--suppress PluginXmlValidity -->
+      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewAction"/>
+    </action>
+    <action id="AddRiderAction" class="net.servicestack.idea.AddRiderAction" icon="/servicestack.svg"
+            text="ServiceStack Reference..." description="Add ServiceStack reference">
+      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewAction"/>
+    </action>
+    <action id="UpdateServiceStackReference" class="net.servicestack.idea.UpdateServiceStackReference" text="Update ServiceStack Reference" icon="/servicestack.svg"
+            description="Updates the selected ServiceStack reference.">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </action>
+  </actions>
+
+</idea-plugin>
