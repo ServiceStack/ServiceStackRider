@@ -12,9 +12,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.io.File;
 import java.net.URL;
 import java.util.Locale;
 
@@ -181,17 +180,6 @@ public class AddTypeScriptRef extends JDialog {
         System.exit(0);
     }
 
-    private ImageIcon createImageIcon(String path, String description) {
-        URL imgURL = getClass().getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL, description);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-    }
-
-
     public String getSelectedDirectory() {
         return selectedDirectory;
     }
@@ -204,7 +192,7 @@ public class AddTypeScriptRef extends JDialog {
         return this.nameTextField.getText();
     }
 
-    public void setInitialDtoName(String initialDtoName) {
+    public void setFileName(String initialDtoName) {
         this.nameTextField.setText(initialDtoName);
     }
 

@@ -2,18 +2,14 @@ package net.servicestack.idea.common;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.PlatformUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * Created by Layoric on 28/05/2016.
@@ -28,8 +24,13 @@ public class AddTypeScriptAction extends AnAction {
         dialog.setSize(dialog.getPreferredSize());
         dialog.setResizable(true);
         dialog.setTitle("Add TypeScript ServiceStack Reference");
-        dialog.setInitialDtoName("dtos");
-
+        PsiElement element = LangDataKeys.PSI_ELEMENT.getData(anActionEvent.getDataContext());
+        if (element instanceof PsiDirectory) {
+            PsiDirectory selectedDir = (PsiDirectory)element;
+            dialog.setSelectedDirectory(selectedDir.getVirtualFile().getPath());
+            String initialName = "dtos";
+            dialog.setFileName(initialName);
+        }
         showDialog(dialog);
     }
 
