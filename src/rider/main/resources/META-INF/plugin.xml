@@ -1,13 +1,16 @@
 <idea-plugin require-restart="true">
   <id>servicestack-rider</id>
   <name>ServiceStack</name>
-  <vendor url="https://project-url">Author</vendor>
+  <vendor url="https://servicestack.net">ServiceStack</vendor>
   <idea-version since-build="192" until-build="212.*" />
   <depends>com.intellij.modules.rider</depends>
 
   <description>
 <![CDATA[
-<p>Sample description</p>
+<p>ServiceStackRider is a plugin for Jetbrains' Rider IDE to support building client applications for ServiceStack services in the simplest possible way. Leveraging ServiceStack's NativeTypes feature, ServiceStackRider makes it easy to work with ServiceStack DTOs by providing intuitive menus for adding ServiceStack references and importing the associated client libraries as dependencies.</p>
+<p>Right clicking on a project or folder, going to "New" will expose the "Add ServiceStack Reference" action. Clicking this action will provide a dialog to specify the base URL of your ServiceStack server.
+Choose a name for your DTOs file and click OK will add the required NuGet ServiceStack.Client package if missing, along with the generated DTO code from your ServiceStack server.</p>
+<p>This plugin supports C#, F#, VB.NET and TypeScript. Use the "Add TypeScript Reference" menu item separately for generating your TypeScript DTOs.</p>
 ]]>
   </description>
 

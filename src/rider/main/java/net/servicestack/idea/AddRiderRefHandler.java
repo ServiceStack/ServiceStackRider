@@ -2,6 +2,7 @@ package net.servicestack.idea;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import net.servicestack.idea.common.Analytics;
 import net.servicestack.idea.common.DialogErrorMessages;
 import net.servicestack.idea.common.IDEAUtils;
 import net.servicestack.idea.common.INativeTypesHandler;
@@ -34,7 +35,7 @@ public class AddRiderRefHandler {
             return false;
         }
 
-        //Analytics.SubmitAnonymousAddReferenceUsage(nativeTypesHandler);
+        Analytics.SubmitAnonymousAddReferenceUsage(nativeTypesHandler);
         IDEAUtils.refreshFile(module,dtoPath, true);
         VirtualFileManager.getInstance().syncRefresh();
 

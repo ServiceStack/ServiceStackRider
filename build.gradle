@@ -109,6 +109,7 @@ intellij {
     version = "${ProductVersion}"
     downloadSources = false
     instrumentCode = false
+    updateSinceUntilBuild = false
     // TODO: add plugins
     // plugins("uml", "com.jetbrains.ChooseRuntime:1.0.9")
 }
@@ -163,6 +164,10 @@ patchPluginXml {
     changeNotes = changelogMatches.collect {
         it[1].replaceAll(/(?s)\r?\n/, "<br />\n")
     }.take(1).join('')
+
+    sinceBuild = "193"
+    untilBuild = "212.*"
+
 }
 
 prepareSandbox {
