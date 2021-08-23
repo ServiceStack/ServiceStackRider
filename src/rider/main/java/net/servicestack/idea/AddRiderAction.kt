@@ -1,9 +1,11 @@
 package net.servicestack.idea
 
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiFile
 import com.jetbrains.rider.actions.base.RiderAnAction
 import net.servicestack.idea.common.IDEAUtils
 import net.servicestack.idea.common.INativeTypesHandler
@@ -12,12 +14,16 @@ import java.io.File
 class AddRiderAction : RiderAnAction(
     "AddRiderAction",
     "ServiceStack Reference...",
-    "Adds a ServiceStack reference to the selected module"), DumbAware {
-    override fun actionPerformed(anActionEvent: AnActionEvent) {
-        val contextFile:VirtualFile = anActionEvent.dataContext.getData("virtualFile") as VirtualFile
-        val dir:String = if (contextFile.isDirectory) contextFile.path else contextFile.parent.path
-        val module = anActionEvent.getData(LangDataKeys.MODULE)
-        val dialog = AddRef(module,this,anActionEvent)
+    "Adds a ServiceStack reference to the selected module"
+), DumbAware {
+    override fun actionPerformed(e: AnActionEvent) {
+        val contextFile = e.dataContext.getData(CommonDataKeys.VIRTUAL_FILE) as VirtualFile
+        val dir: String = if (contextFile.isDirectory)
+            contextFile.path
+        else contextFile.parent.path
+
+        val module = e.getData(LangDataKeys.MODULE)
+        val dialog = AddRef(module, this, e)
         dialog.pack()
         dialog.setLocationRelativeTo(null)
         dialog.size = dialog.preferredSize
@@ -25,24 +31,26 @@ class AddRiderAction : RiderAnAction(
         dialog.title = "Add ServiceStack Reference"
         dialog.selectedDirectory = dir
 
-        val baseDir = File(dir)
-        var count = 0;
-        val maxWalk = 8;
-        val projFile: File;
-        while(true) {
+        var baseDir = File(dir)
+        var count = 0
+        val maxWalk = 8
+        val projFile: File
+        while (true) {
             val projFiles = baseDir.listFiles { _, filename ->
                 filename.endsWith(".csproj") ||
                         filename.endsWith(".vbproj") ||
                         filename.endsWith(".fsproj")
             } ?: emptyArray()
 
-            if(projFiles.isNotEmpty()) {
+            if (projFiles.isNotEmpty()) {
                 projFile = projFiles.first()
-                break;
+                break
             }
             count++
-            if(count >= maxWalk) {
+            if (count >= maxWalk) {
                 throw Exception("Unable to locate project file.")
+            } else {
+                baseDir = baseDir.parentFile
             }
         }
 
@@ -60,13 +68,14 @@ class AddRiderAction : RiderAnAction(
             IDEAUtils.getInitialFileName(
                 dir,
                 nativeTypeHandler
-            ))
+            )
+        )
 
         dialog.nativeTypesHandler = nativeTypeHandler
         dialog.isVisible = true
     }
 
-    public fun dialogOk(e: AnActionEvent) {
+    fun dialogOk(e: AnActionEvent) {
         super.actionPerformed(e)
     }
 }
