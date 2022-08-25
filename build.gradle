@@ -166,7 +166,7 @@ patchPluginXml {
     }.take(1).join('')
 
     sinceBuild = "193"
-    untilBuild = "221.*"
+    untilBuild = "222.*"
 
 }
 
