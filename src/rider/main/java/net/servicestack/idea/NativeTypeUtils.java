@@ -18,6 +18,7 @@ public class NativeTypeUtils {
         if (fileName.endsWith(".vb")) result = new VbNetNativeTypesHandler();
         if (fileName.endsWith("dtos.ts")) result = new TypeScriptConcreteNativeTypesHandler();
         if (fileName.endsWith("dtos.d.ts")) result = new TypeScriptNativeTypesHandler();
+        if(fileName.endsWith("dtos.mjs")) result = new MjsNativeTypesHandler();
         return result;
     }
 
