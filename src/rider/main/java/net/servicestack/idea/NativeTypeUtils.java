@@ -1,7 +1,6 @@
 package net.servicestack.idea;
 
 import com.intellij.openapi.module.Module;
-import com.intellij.util.PlatformUtils;
 
 import net.servicestack.idea.common.*;
 
