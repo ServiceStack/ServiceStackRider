@@ -2,7 +2,7 @@
   <id>servicestack-rider</id>
   <name>ServiceStack</name>
   <vendor url="https://servicestack.net">ServiceStack</vendor>
-  <idea-version since-build="192" until-build="212.*" />
+  <idea-version since-build="192" until-build="299.*" />
   <depends>com.intellij.modules.rider</depends>
 
   <description>
