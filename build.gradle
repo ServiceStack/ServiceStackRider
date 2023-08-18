@@ -166,8 +166,7 @@ patchPluginXml {
         it[1].replaceAll(/(?s)\r?\n/, "<br />\n")
     }.take(1).join('')
 
-    sinceBuild = "193"
-    untilBuild = "299.*"
+    sinceBuild = "213"
 
 }
 

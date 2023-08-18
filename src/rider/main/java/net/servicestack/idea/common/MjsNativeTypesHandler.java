@@ -1,8 +1,5 @@
 package net.servicestack.idea.common;
 
-import net.servicestack.idea.common.BaseNativeTypesHandler;
-import net.servicestack.idea.common.NativeTypesLanguage;
-
 public class MjsNativeTypesHandler extends BaseNativeTypesHandler {
     @Override
     public String getFileExtension() {
