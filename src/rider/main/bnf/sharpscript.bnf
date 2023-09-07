@@ -1,0 +1,82 @@
+{
+  parserClass="net.servicestack.idea.sharpscript.SharpScriptParser"
+  parserUtilClass="net.servicestack.idea.sharpscript.SharpScriptParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="SharpScript"
+
+  psiImplClassSuffix="Impl"
+}
+
+
+sharpScriptFile ::= element*
+
+element ::= mustacheExpr
+          | methodCall
+          | methodChain
+          | jsLiteral
+          | shorthandNotation
+          | assignment
+          | templateLiteral
+          | shorthandArrowExpr
+
+array ::= ARRAY_START expr ARRAY_END
+
+object ::= OBJECT_START assignment (',' assignment)* OBJECT_END
+
+
+
+// Mustache expressions
+mustacheExpr ::= MUSTACHE_START sharpScriptInside MUSTACHE_END
+
+
+expr ::= EXPRESSION_TOKEN
+
+// Method calls and chaining
+methodCall ::= methodName '(' args ')'
+methodName ::= IDENTIFIER
+args       ::= expr (',' expr)*
+
+methodChain ::= expr PIPE methodCall (PIPE methodCall)*
+
+// JavaScript literals
+jsLiteral ::= NULL
+            | TRUE
+            | NUMBER
+            | STRING
+            | ARRAY
+            | OBJECT
+
+
+sharpScriptInside ::=  expressionInside (HASHTAG expressionInside)*
+                     | expressionInside (PIPE_CHAIN expressionInside)*
+                     | expressionInside (OPEN_PAREN expressionInside CLOSE_PAREN)*
+                     | expressionInside (OPEN_BRACE expressionInside CLOSE_BRACE)*
+                     | expressionInside (ARROW expressionInside)*
+                     | expressionInside (SINGLE_QUOTE expressionInside SINGLE_QUOTE)*
+
+expressionInside ::= IDENTIFIER
+                   | STRING
+                   | NUMBER
+                   | PIPE_CHAIN
+                   | HASHTAG
+                   | OPEN_PAREN expressionInside CLOSE_PAREN
+                   | OPEN_BRACE expressionInside CLOSE_BRACE
+                   | ARROW
+
+// ES6 shorthand notation
+shorthandNotation ::= 'var' IDENTIFIER '=' expr
+
+// Assignment expressions
+assignment ::= target '=' expr
+target     ::= IDENTIFIER
+             | IDENTIFIER '[' expr ']'
+             | IDENTIFIER '.' IDENTIFIER
+
+
+// Template literals
+templateLiteral ::= TEMPLATE_START expr TEMPLATE_END
+
+// Shorthand arrow expressions
+shorthandArrowExpr ::= expr PIPE methodName FAT_ARROW expr
