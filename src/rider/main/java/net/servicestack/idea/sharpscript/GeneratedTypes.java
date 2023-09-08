@@ -8,6 +8,7 @@ import net.servicestack.idea.sharpscript.psi.impl.*;
 
 public interface GeneratedTypes {
 
+  IElementType BACKTICK_EXPR = new IElementType("BACKTICK_EXPR", null);
   IElementType BLOCK_HELPER = new IElementType("BLOCK_HELPER", null);
   IElementType BOOLEAN = new IElementType("BOOLEAN", null);
   IElementType CLOSE = new IElementType("CLOSE", null);
@@ -35,12 +36,18 @@ public interface GeneratedTypes {
   IElementType SIMPLE_EXPR = new IElementType("SIMPLE_EXPR", null);
   IElementType STRING = new IElementType("STRING", null);
 
+  IElementType BACKTICK_CLOSE = new IElementType("BACKTICK_CLOSE", null);
+  IElementType BACKTICK_CONTENT = new IElementType("BACKTICK_CONTENT", null);
+  IElementType BACKTICK_OPEN = new IElementType("BACKTICK_OPEN", null);
   IElementType EXPR = new IElementType("expr", null);
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == BLOCK_HELPER) {
+      if (type == BACKTICK_EXPR) {
+        return new SharpScriptBacktickExprImpl(node);
+      }
+      else if (type == BLOCK_HELPER) {
         return new SharpScriptBlockHelperImpl(node);
       }
       else if (type == BOOLEAN) {

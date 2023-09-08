@@ -4,7 +4,7 @@ package net.servicestack.idea.sharpscript;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static net.servicestack.idea.sharpscript.GeneratedTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static net.servicestack.idea.sharpscript.SharpScriptParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiParser;
@@ -233,6 +233,31 @@ public class SharpScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // BACKTICK_OPEN BACKTICK_CONTENT* BACKTICK_CLOSE
+  public static boolean backtick_expr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "backtick_expr")) return false;
+    if (!nextTokenIs(b, BACKTICK_OPEN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BACKTICK_OPEN);
+    r = r && backtick_expr_1(b, l + 1);
+    r = r && consumeToken(b, BACKTICK_CLOSE);
+    exit_section_(b, m, BACKTICK_EXPR, r);
+    return r;
+  }
+
+  // BACKTICK_CONTENT*
+  private static boolean backtick_expr_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "backtick_expr_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, BACKTICK_CONTENT)) break;
+      if (!empty_element_parsed_guard_(b, "backtick_expr_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // OPEN_BLOCK expr_contents CLOSE_BLOCK
   public static boolean block_helper(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_helper")) return false;
@@ -277,7 +302,7 @@ public class SharpScriptParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR
+  // id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR | backtick_expr
   public static boolean expr_component(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expr_component")) return false;
     boolean r;
@@ -288,6 +313,7 @@ public class SharpScriptParser implements PsiParser, LightPsiParser {
     if (!r) r = BOOLEAN(b, l + 1);
     if (!r) r = DATA_PREFIX(b, l + 1);
     if (!r) r = expr_component_5(b, l + 1);
+    if (!r) r = backtick_expr(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

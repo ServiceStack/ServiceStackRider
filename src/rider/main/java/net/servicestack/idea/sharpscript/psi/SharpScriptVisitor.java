@@ -75,6 +75,10 @@ public class SharpScriptVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBacktickExpr(@NotNull SharpScriptBacktickExpr o) {
+    visitPsiElement(o);
+  }
+
   public void visitBlockHelper(@NotNull SharpScriptBlockHelper o) {
     visitPsiElement(o);
   }

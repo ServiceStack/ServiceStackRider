@@ -25,4 +25,7 @@ public interface SharpScriptExprComponent extends PsiElement {
   @Nullable
   SharpScriptString getString();
 
+  @Nullable
+  SharpScriptBacktickExpr getBacktickExpr();
+
 }

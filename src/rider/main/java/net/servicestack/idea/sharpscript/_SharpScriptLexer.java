@@ -27,6 +27,7 @@ public class _SharpScriptLexer implements FlexLexer {
   public static final int IN_OPEN_RAW_BLOCK = 6;
   public static final int IN_OPEN_BLOCK_NAME = 8;
   public static final int IN_COMMENT = 10;
+  public static final int IN_BACKTICK = 12;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -35,7 +36,7 @@ public class _SharpScriptLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1,  1,  2,  2,  3,  3,  3,  3,  4, 4
+     0,  0,  1,  1,  2,  2,  3,  3,  3,  3,  4,  4,  5, 5
   };
 
   /**
@@ -73,13 +74,12 @@ public class _SharpScriptLexer implements FlexLexer {
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\11\0\1\1\1\2\2\3\1\2\22\0\1\1\1\4"+
-    "\1\5\1\6\3\0\1\7\1\10\1\11\1\12\2\0"+
-    "\1\13\1\14\1\15\12\16\4\0\1\17\1\0\1\20"+
-    "\21\21\1\22\10\21\1\23\1\24\1\25\1\26\1\27"+
-    "\1\0\1\30\1\31\2\21\1\32\1\33\5\21\1\34"+
-    "\1\21\1\35\3\21\1\36\1\37\1\40\1\41\5\21"+
-    "\1\42\1\43\1\44\7\0\1\3\u01a2\0\2\3\326\0"+
-    "\u0100\3";
+    "\1\5\1\6\3\0\1\7\1\10\1\11\3\0\1\12"+
+    "\1\13\1\14\12\15\4\0\1\16\1\0\1\17\32\20"+
+    "\1\0\1\21\2\0\1\22\1\23\1\24\1\25\2\20"+
+    "\1\26\1\27\5\20\1\30\1\20\1\25\3\20\1\31"+
+    "\1\32\1\33\1\34\5\20\1\35\1\0\1\36\7\0"+
+    "\1\3\u01a2\0\2\3\326\0\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -106,14 +106,14 @@ public class _SharpScriptLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\5\0\1\1\1\2\3\1\1\3\1\4\1\5\1\6"+
-    "\3\7\3\1\2\10\1\11\2\0\1\12\3\0\2\7"+
-    "\1\0\1\13\4\0\1\14\1\15\3\0\1\5\2\7"+
-    "\4\0\1\16\1\17\1\20\1\0\1\21\2\0\1\22"+
-    "\1\23\2\0\1\24\1\0\1\25\15\0";
+    "\6\0\1\1\1\2\4\1\1\3\1\4\1\5\1\6"+
+    "\1\7\1\10\2\7\3\1\2\11\1\12\1\13\1\14"+
+    "\2\0\1\15\4\0\2\7\1\0\1\16\1\17\3\0"+
+    "\1\20\1\21\2\0\1\5\2\7\4\0\1\22\1\23"+
+    "\1\24\1\25\2\0\1\26\1\27\1\0\1\30\1\31";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[76];
+    int [] result = new int[65];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -138,19 +138,18 @@ public class _SharpScriptLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\45\0\112\0\157\0\224\0\271\0\336\0\u0103"+
-    "\0\u0128\0\u014d\0\u0172\0\271\0\u0197\0\271\0\u01bc\0\u01e1"+
-    "\0\u0206\0\u022b\0\u0250\0\u0275\0\u029a\0\u02bf\0\u02e4\0\u0309"+
-    "\0\u014d\0\271\0\u032e\0\u0353\0\u0378\0\u039d\0\u03c2\0\u03e7"+
-    "\0\271\0\u040c\0\u0431\0\u0456\0\u047b\0\u04a0\0\271\0\u04c5"+
-    "\0\u04ea\0\u050f\0\u0378\0\u0534\0\u0559\0\u057e\0\u05a3\0\u05c8"+
-    "\0\u05ed\0\u04a0\0\271\0\271\0\u0612\0\u01bc\0\u0637\0\u065c"+
-    "\0\271\0\271\0\u0681\0\u06a6\0\271\0\u06cb\0\271\0\u06f0"+
-    "\0\u0715\0\u073a\0\u075f\0\u0784\0\u07a9\0\u07ce\0\u07f3\0\u0818"+
-    "\0\u083d\0\u0862\0\u0887\0\u08ac";
+    "\0\0\0\37\0\76\0\135\0\174\0\233\0\272\0\331"+
+    "\0\370\0\u0117\0\u0136\0\u0155\0\272\0\272\0\u0174\0\272"+
+    "\0\u0193\0\272\0\u01b2\0\u01d1\0\u01f0\0\u020f\0\u022e\0\u024d"+
+    "\0\u026c\0\272\0\272\0\u028b\0\u02aa\0\u0136\0\272\0\u02c9"+
+    "\0\u0155\0\u02e8\0\u0307\0\u0326\0\u0345\0\u0364\0\272\0\u0383"+
+    "\0\u03a2\0\u03c1\0\u03e0\0\u03ff\0\272\0\u041e\0\u043d\0\u0307"+
+    "\0\u045c\0\u047b\0\u049a\0\u04b9\0\u04d8\0\u04f7\0\u03ff\0\272"+
+    "\0\272\0\u0193\0\u0516\0\u0535\0\272\0\272\0\u0554\0\272"+
+    "\0\272";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[76];
+    int [] result = new int[65];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -173,39 +172,37 @@ public class _SharpScriptLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\6\2\7\37\6\1\10\1\6\1\11\7\6\1\12"+
-    "\1\13\1\14\4\6\1\15\1\6\1\16\2\17\4\6"+
-    "\4\17\1\20\4\17\1\21\1\17\1\22\1\6\1\23"+
-    "\7\6\1\12\1\13\1\14\4\6\1\15\1\6\1\16"+
-    "\2\17\4\6\4\17\1\20\4\17\1\21\1\17\1\24"+
-    "\47\6\2\25\2\6\7\25\1\26\31\25\46\0\2\7"+
-    "\104\0\1\27\46\0\1\30\7\31\1\32\12\31\1\0"+
-    "\1\31\1\33\20\31\24\0\1\34\34\0\1\35\1\0"+
-    "\1\15\44\0\1\17\2\0\2\17\4\0\13\17\21\0"+
-    "\1\17\2\0\2\17\4\0\1\17\1\36\11\17\21\0"+
-    "\1\17\2\0\2\17\4\0\7\17\1\37\3\17\45\0"+
-    "\1\40\46\0\1\41\42\0\1\42\15\0\1\43\44\0"+
-    "\1\44\35\0\1\45\1\0\1\46\10\0\1\47\22\0"+
-    "\1\50\46\0\1\51\7\0\1\31\14\0\1\31\4\0"+
-    "\1\31\1\0\1\31\1\0\2\31\1\0\1\31\27\0"+
-    "\1\52\37\0\1\53\44\0\1\17\2\0\2\17\4\0"+
-    "\5\17\1\54\5\17\21\0\1\17\2\0\2\17\4\0"+
-    "\12\17\1\55\7\0\1\45\44\0\1\45\10\0\1\56"+
-    "\42\0\1\57\44\0\1\57\30\0\1\60\13\0\1\61"+
-    "\47\0\1\62\2\0\2\62\5\0\12\62\45\0\1\63"+
-    "\46\0\1\64\5\0\1\65\55\0\1\17\2\0\2\17"+
-    "\4\0\10\17\1\55\2\17\21\0\1\17\2\0\2\17"+
-    "\4\0\3\17\1\66\7\17\21\0\1\67\2\0\2\67"+
-    "\5\0\12\67\47\0\1\70\44\0\1\71\13\0\1\72"+
-    "\55\0\1\73\36\0\1\67\2\0\2\67\5\0\12\67"+
-    "\2\0\1\74\44\0\1\75\31\0\1\76\57\0\1\77"+
-    "\40\0\1\100\41\0\1\101\42\0\1\102\47\0\1\103"+
-    "\33\0\1\104\62\0\1\105\24\0\1\106\47\0\1\107"+
-    "\23\0\1\110\63\0\1\111\42\0\1\112\47\0\1\113"+
-    "\30\0\1\114\45\0\1\32\32\0";
+    "\1\7\2\10\32\7\1\11\1\12\5\7\1\13\1\7"+
+    "\1\14\1\15\1\16\3\7\1\17\1\7\1\20\1\21"+
+    "\1\7\1\21\1\22\3\21\1\23\3\21\1\24\1\21"+
+    "\1\25\1\26\35\7\1\27\40\7\2\30\2\7\6\30"+
+    "\1\31\24\30\23\32\1\33\13\32\40\0\2\10\71\0"+
+    "\1\34\37\0\1\35\2\36\1\0\2\36\1\37\13\36"+
+    "\1\40\15\36\2\41\1\0\4\41\1\37\11\41\1\42"+
+    "\15\41\13\0\1\43\1\0\1\17\36\0\1\21\2\0"+
+    "\1\21\1\0\1\21\1\0\11\21\17\0\1\21\2\0"+
+    "\1\21\1\0\1\21\1\0\1\44\10\21\17\0\1\21"+
+    "\2\0\1\21\1\0\1\21\1\0\5\21\1\45\3\21"+
+    "\37\0\1\46\37\0\1\47\35\0\1\50\13\0\1\51"+
+    "\36\0\1\52\30\0\1\53\1\0\1\54\7\0\1\55"+
+    "\16\0\1\56\37\0\1\57\5\0\1\36\13\0\1\36"+
+    "\3\0\1\36\1\0\1\36\1\0\1\36\1\0\1\36"+
+    "\12\0\1\41\11\0\1\41\3\0\1\41\1\0\1\41"+
+    "\1\0\1\41\1\0\1\41\20\0\1\60\36\0\1\21"+
+    "\2\0\1\21\1\0\1\21\1\0\4\21\1\61\4\21"+
+    "\17\0\1\21\2\0\1\21\1\0\1\21\1\0\10\21"+
+    "\1\62\6\0\1\53\36\0\1\53\7\0\1\63\34\0"+
+    "\1\64\36\0\1\64\23\0\1\65\12\0\1\66\41\0"+
+    "\1\67\2\0\1\67\3\0\11\67\37\0\1\70\37\0"+
+    "\1\71\15\0\1\21\2\0\1\21\1\0\1\21\1\0"+
+    "\6\21\1\62\2\21\17\0\1\21\2\0\1\21\1\0"+
+    "\1\21\1\0\2\21\1\72\6\21\17\0\1\73\2\0"+
+    "\1\73\3\0\11\73\40\0\1\74\36\0\1\75\12\0"+
+    "\1\76\41\0\1\73\2\0\1\73\3\0\11\73\1\0"+
+    "\1\77\36\0\1\100\36\0\1\101";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[2257];
+    int [] result = new int[1395];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -243,13 +240,13 @@ public class _SharpScriptLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\5\0\1\11\5\1\1\11\1\1\1\11\11\1\2\0"+
-    "\1\11\3\0\2\1\1\0\1\11\4\0\1\1\1\11"+
-    "\3\0\3\1\4\0\1\1\2\11\1\0\1\1\2\0"+
-    "\2\11\2\0\1\11\1\0\1\11\15\0";
+    "\6\0\1\11\5\1\2\11\1\1\1\11\1\1\1\11"+
+    "\7\1\2\11\1\1\2\0\1\11\4\0\2\1\1\0"+
+    "\1\11\1\1\3\0\1\1\1\11\2\0\3\1\4\0"+
+    "\1\1\2\11\1\1\2\0\2\11\1\0\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[76];
+    int [] result = new int[65];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -582,109 +579,129 @@ public class _SharpScriptLexer implements FlexLexer {
             { return BAD_CHARACTER;
             }
           // fall through
-          case 22: break;
+          case 26: break;
           case 2:
             { return WHITE_SPACE;
             }
           // fall through
-          case 23: break;
+          case 27: break;
           case 3:
             { return OPEN_SEXPR;
             }
           // fall through
-          case 24: break;
+          case 28: break;
           case 4:
             { return CLOSE_SEXPR;
             }
           // fall through
-          case 25: break;
+          case 29: break;
           case 5:
             { return NUMBER;
             }
           // fall through
-          case 26: break;
+          case 30: break;
           case 6:
             { return DATA_PREFIX;
             }
           // fall through
-          case 27: break;
+          case 31: break;
           case 7:
             { return ID;
             }
           // fall through
-          case 28: break;
-          case 8:
-            { return COMMENT_CONTENT;
-            }
-          // fall through
-          case 29: break;
-          case 9:
-            { yybegin(IN_OPEN_CLOSE); return OPEN;
-            }
-          // fall through
-          case 30: break;
-          case 10:
-            { return STRING;
-            }
-          // fall through
-          case 31: break;
-          case 11:
-            { yybegin(YYINITIAL); return CLOSE;
-            }
-          // fall through
           case 32: break;
-          case 12:
-            { yybegin(IN_OPEN_BLOCK_NAME); return OPEN_BLOCK;
+          case 8:
+            { yybegin(IN_BACKTICK); return BACKTICK_OPEN;
             }
           // fall through
           case 33: break;
-          case 13:
-            { return OPEN_PARTIAL;
+          case 9:
+            { return COMMENT_CONTENT;
             }
           // fall through
           case 34: break;
+          case 10:
+            { return BACKTICK_CONTENT;
+            }
+          // fall through
+          case 35: break;
+          case 11:
+            { yybegin(IN_OPENBLOCK_CLOSEBLOCK); return BACKTICK_CLOSE;
+            }
+          // fall through
+          case 36: break;
+          case 12:
+            { yybegin(IN_OPEN_CLOSE); return OPEN;
+            }
+          // fall through
+          case 37: break;
+          case 13:
+            { return STRING;
+            }
+          // fall through
+          case 38: break;
           case 14:
+            { yybegin(YYINITIAL); return CLOSE;
+            }
+          // fall through
+          case 39: break;
+          case 15:
+            { yypushState(1); yybegin(IN_OPEN_CLOSE); return OPEN;
+            }
+          // fall through
+          case 40: break;
+          case 16:
+            { yybegin(IN_OPEN_BLOCK_NAME); return OPEN_BLOCK;
+            }
+          // fall through
+          case 41: break;
+          case 17:
+            { return OPEN_PARTIAL;
+            }
+          // fall through
+          case 42: break;
+          case 18:
             { String blockName = yytext().toString().substring(3); // Extract block name
       blockStack.push(blockName);  // Push block name onto stack
       yybegin(IN_OPENBLOCK_CLOSEBLOCK);
       return OPEN_BLOCK;
             }
           // fall through
-          case 35: break;
-          case 15:
+          case 43: break;
+          case 19:
             { return OPEN_RAW_BLOCK;
             }
           // fall through
-          case 36: break;
-          case 16:
+          case 44: break;
+          case 20:
             { return CLOSE_RAW_BLOCK;
             }
           // fall through
-          case 37: break;
-          case 17:
+          case 45: break;
+          case 21:
             { return BOOLEAN;
             }
           // fall through
-          case 38: break;
-          case 18:
+          case 46: break;
+          case 22:
             { yybegin(YYINITIAL); return COMMENT_CLOSE;
             }
           // fall through
-          case 39: break;
-          case 19:
+          case 47: break;
+          case 23:
             { yybegin(IN_COMMENT); return COMMENT_OPEN;
             }
           // fall through
-          case 40: break;
-          case 20:
+          case 48: break;
+          case 24:
             // lookahead expression with fixed base length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL, zzStartRead, 1);
             { /* do nothing, as COMMENT_CLOSE is upcoming */
             }
           // fall through
-          case 41: break;
-          case 21:
+          case 49: break;
+          case 25:
             { String closeName = yytext().toString().substring(3, yytext().length() - 2);  // Extract block name from closing tag
         if (!blockStack.isEmpty() && closeName.equals(blockStack.peek())) {  // Check if it matches the last opened block
           blockStack.pop();  // Pop the last opened block
@@ -694,7 +711,7 @@ public class _SharpScriptLexer implements FlexLexer {
         // Handle unmatched blocks here (optional)
             }
           // fall through
-          case 42: break;
+          case 50: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

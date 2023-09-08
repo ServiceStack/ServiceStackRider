@@ -59,4 +59,10 @@ public class SharpScriptExprComponentImpl extends ASTWrapperPsiElement implement
     return findChildByClass(SharpScriptString.class);
   }
 
+  @Override
+  @Nullable
+  public SharpScriptBacktickExpr getBacktickExpr() {
+    return findChildByClass(SharpScriptBacktickExpr.class);
+  }
+
 }

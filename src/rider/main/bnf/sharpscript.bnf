@@ -25,7 +25,11 @@ simple_expr ::= OPEN expr CLOSE
 block_helper ::= OPEN_BLOCK expr_contents CLOSE_BLOCK
 expr_contents ::= expr_component*
 
-expr_component ::= id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR
+expr_component ::= id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR | backtick_expr
+
+// New rule for backtick expression
+backtick_expr ::= BACKTICK_OPEN BACKTICK_CONTENT* BACKTICK_CLOSE
+
 
 // Define partials
 partial ::= OPEN_PARTIAL id CLOSE
@@ -35,6 +39,7 @@ comment ::= COMMENT_OPEN COMMENT_CONTENT? COMMENT_CLOSE
 
 // Raw blocks
 raw_block ::= OPEN_RAW_BLOCK CONTENT CLOSE_RAW_BLOCK
+
 
 // Terminal elements
 CONTENT ::= 'content'
@@ -55,5 +60,6 @@ BOOLEAN ::= 'boolean'
 DATA_PREFIX ::= '@'
 OPEN_SEXPR ::= '('
 CLOSE_SEXPR ::= ')'
+
 
 // Additional definitions based on your HandleBars.flex rules can go here.

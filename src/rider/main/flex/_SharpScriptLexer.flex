@@ -47,7 +47,6 @@ EOL=\R
 OPEN = \{\{
 CLOSE = \}\}
 OPEN_BLOCK = \{\{\#
-CLOSE_BLOCK = \}\}\#
 OPEN_PARTIAL = \{\{\>
 COMMENT_OPEN = \{\{\!--
 COMMENT_CLOSE = --\}\}
@@ -55,7 +54,7 @@ OPEN_RAW_BLOCK = \{\{\{\{
 CLOSE_RAW_BLOCK = \}\}\}\}
 BOOLEAN = true|false
 ID = [a-zA-Z_][a-zA-Z_0-9]*
-STRING = ("(\\[\"\\btnfr]|[^\"\\\R])*" | '(\\[\'\\btnfr]|[^\'\\\R])*')
+STRING = (\"(\\[\"\\btnfr]|[^\"\\\n\r])*\" | '(\\[\'\\btnfr]|[^\'\\\n\r])*')
 NUMBER = [0-9]+(\.[0-9]+)?
 DATA_PREFIX = @
 OPEN_SEXPR = \(
@@ -78,7 +77,10 @@ WHITE_SPACE = [ \t\n\r]+
     }
 }
 
-<IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK> {
+
+<IN_OPEN_CLOSE> {
+    {CLOSE}  { yybegin(YYINITIAL); return CLOSE; }
+    "`"                { yybegin(IN_BACKTICK); return BACKTICK_OPEN; }
     {BOOLEAN}          { return BOOLEAN; }
     {NUMBER}           { return NUMBER; }
     {DATA_PREFIX}      { return DATA_PREFIX; }
@@ -86,14 +88,10 @@ WHITE_SPACE = [ \t\n\r]+
     {CLOSE_SEXPR}      { return CLOSE_SEXPR; }
     {ID}      { return ID; }
     {STRING}  { return STRING; }
-
-}
-
-<IN_OPEN_CLOSE> {
-    {CLOSE}  { yybegin(YYINITIAL); return CLOSE; }
 }
 
 <IN_OPENBLOCK_CLOSEBLOCK> {
+    {OPEN}         { yypushState(1); yybegin(IN_OPEN_CLOSE); return OPEN; }
     \{\{\/([a-zA-Z0-9]+)\}\} {
         String closeName = yytext().toString().substring(3, yytext().length() - 2);  // Extract block name from closing tag
         if (!blockStack.isEmpty() && closeName.equals(blockStack.peek())) {  // Check if it matches the last opened block
@@ -108,6 +106,11 @@ WHITE_SPACE = [ \t\n\r]+
 
 <IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK, YYINITIAL> {
     {COMMENT_OPEN}   { yybegin(IN_COMMENT); return COMMENT_OPEN; }
+}
+
+<IN_BACKTICK> {
+  "`"  { yybegin(IN_OPENBLOCK_CLOSEBLOCK); return BACKTICK_CLOSE; }
+  [^\`] { return BACKTICK_CONTENT; }
 }
 
 <IN_COMMENT> {
