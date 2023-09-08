@@ -16,6 +16,7 @@ import static net.servicestack.idea.sharpscript.GeneratedTypes.*;
   }
 
   private Stack<Integer> stack = new Stack<>();
+  private Stack<String> blockStack = new Stack<>();
 
   public void yypushState(int newState) {
     stack.push(yystate());
@@ -26,6 +27,8 @@ import static net.servicestack.idea.sharpscript.GeneratedTypes.*;
     yybegin(stack.pop());
   }
 
+  String blockName;  // to store the block name like 'if', 'each', etc.
+
 %}
 
 %public
@@ -35,7 +38,9 @@ import static net.servicestack.idea.sharpscript.GeneratedTypes.*;
 %type IElementType
 %unicode
 
-%state IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK
+%state IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK, IN_OPEN_RAW_BLOCK, IN_OPEN_BLOCK_NAME
+%state IN_COMMENT
+%state IN_BACKTICK
 
 
 EOL=\R
@@ -61,31 +66,54 @@ WHITE_SPACE = [ \t\n\r]+
 <YYINITIAL> {
   {WHITE_SPACE}      { return WHITE_SPACE; }
   {OPEN}             { yybegin(IN_OPEN_CLOSE); return OPEN; }
-  {OPEN_BLOCK}       { yybegin(IN_OPENBLOCK_CLOSEBLOCK); return OPEN_BLOCK; }
-  {CLOSE_BLOCK}      { return CLOSE_BLOCK; }
+  {OPEN_BLOCK}       { yybegin(IN_OPEN_BLOCK_NAME); return OPEN_BLOCK; }
   {OPEN_PARTIAL}     { return OPEN_PARTIAL; }
-  {COMMENT_OPEN}     { return COMMENT_OPEN; }
-  {COMMENT_CLOSE}    { return COMMENT_CLOSE; }
   {OPEN_RAW_BLOCK}   { return OPEN_RAW_BLOCK; }
   {CLOSE_RAW_BLOCK}  { return CLOSE_RAW_BLOCK; }
-  {BOOLEAN}          { return BOOLEAN; }
-  {NUMBER}           { return NUMBER; }
-  {DATA_PREFIX}      { return DATA_PREFIX; }
-  {OPEN_SEXPR}       { return OPEN_SEXPR; }
-  {CLOSE_SEXPR}      { return CLOSE_SEXPR; }
+    \{\{\#([a-zA-Z0-9]+) {
+      String blockName = yytext().toString().substring(3); // Extract block name
+      blockStack.push(blockName);  // Push block name onto stack
+      yybegin(IN_OPENBLOCK_CLOSEBLOCK);
+      return OPEN_BLOCK;
+    }
 }
 
 <IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK> {
+    {BOOLEAN}          { return BOOLEAN; }
+    {NUMBER}           { return NUMBER; }
+    {DATA_PREFIX}      { return DATA_PREFIX; }
+    {OPEN_SEXPR}       { return OPEN_SEXPR; }
+    {CLOSE_SEXPR}      { return CLOSE_SEXPR; }
     {ID}      { return ID; }
     {STRING}  { return STRING; }
+
 }
 
 <IN_OPEN_CLOSE> {
     {CLOSE}  { yybegin(YYINITIAL); return CLOSE; }
 }
+
 <IN_OPENBLOCK_CLOSEBLOCK> {
-    {CLOSE_BLOCK}  { yybegin(YYINITIAL); return CLOSE_BLOCK; }
+    \{\{\/([a-zA-Z0-9]+)\}\} {
+        String closeName = yytext().toString().substring(3, yytext().length() - 2);  // Extract block name from closing tag
+        if (!blockStack.isEmpty() && closeName.equals(blockStack.peek())) {  // Check if it matches the last opened block
+          blockStack.pop();  // Pop the last opened block
+          yybegin(YYINITIAL);
+          return CLOSE_BLOCK;
+        }
+        // Handle unmatched blocks here (optional)
+      }
 }
 
+
+<IN_OPEN_CLOSE, IN_OPENBLOCK_CLOSEBLOCK, YYINITIAL> {
+    {COMMENT_OPEN}   { yybegin(IN_COMMENT); return COMMENT_OPEN; }
+}
+
+<IN_COMMENT> {
+    {COMMENT_CLOSE}  { yybegin(YYINITIAL); return COMMENT_CLOSE; }
+    . / {COMMENT_CLOSE} { /* do nothing, as COMMENT_CLOSE is upcoming */ }
+    . { return COMMENT_CONTENT; }
+}
 
 [^] { return BAD_CHARACTER; }

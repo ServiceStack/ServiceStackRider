@@ -38,7 +38,7 @@ public class SharpScriptSyntaxHighlighter extends SyntaxHighlighterBase {
         else if (tokenType.equals(OPEN_PARTIAL)) {
             keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.METADATA};
         }
-        else if (tokenType.equals(COMMENT_OPEN) || tokenType.equals(COMMENT_CLOSE)) {
+        else if (tokenType.equals(COMMENT_OPEN) || tokenType.equals(COMMENT_CLOSE) || tokenType.equals(COMMENT_CONTENT)) {
             keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.LINE_COMMENT};
         }
         else if (tokenType.equals(OPEN_RAW_BLOCK) || tokenType.equals(CLOSE_RAW_BLOCK)) {
