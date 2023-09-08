@@ -8,102 +8,115 @@ import net.servicestack.idea.sharpscript.psi.impl.*;
 
 public interface GeneratedTypes {
 
-  IElementType ARGS = new IElementType("ARGS", null);
-  IElementType ARRAY = new IElementType("ARRAY", null);
-  IElementType ASSIGNMENT = new IElementType("ASSIGNMENT", null);
-  IElementType ELEMENT = new IElementType("ELEMENT", null);
-  IElementType EXPR = new IElementType("EXPR", null);
-  IElementType EXPRESSION_INSIDE = new IElementType("EXPRESSION_INSIDE", null);
-  IElementType JS_LITERAL = new IElementType("JS_LITERAL", null);
-  IElementType METHOD_CALL = new IElementType("METHOD_CALL", null);
-  IElementType METHOD_CHAIN = new IElementType("METHOD_CHAIN", null);
-  IElementType METHOD_NAME = new IElementType("METHOD_NAME", null);
-  IElementType MUSTACHE_EXPR = new IElementType("MUSTACHE_EXPR", null);
-  IElementType OBJECT = new IElementType("OBJECT", null);
-  IElementType SHARP_SCRIPT_INSIDE = new IElementType("SHARP_SCRIPT_INSIDE", null);
-  IElementType SHORTHAND_ARROW_EXPR = new IElementType("SHORTHAND_ARROW_EXPR", null);
-  IElementType SHORTHAND_NOTATION = new IElementType("SHORTHAND_NOTATION", null);
-  IElementType TARGET = new IElementType("TARGET", null);
-  IElementType TEMPLATE_LITERAL = new IElementType("TEMPLATE_LITERAL", null);
-
-  IElementType ARRAY_END = new IElementType("ARRAY_END", null);
-  IElementType ARRAY_START = new IElementType("ARRAY_START", null);
-  IElementType ARROW = new IElementType("ARROW", null);
-  IElementType CLOSE_BRACE = new IElementType("CLOSE_BRACE", null);
-  IElementType CLOSE_PAREN = new IElementType("CLOSE_PAREN", null);
-  IElementType EXPRESSION_TOKEN = new IElementType("EXPRESSION_TOKEN", null);
-  IElementType FAT_ARROW = new IElementType("FAT_ARROW", null);
-  IElementType HASHTAG = new IElementType("HASHTAG", null);
-  IElementType IDENTIFIER = new IElementType("IDENTIFIER", null);
-  IElementType MUSTACHE_END = new IElementType("MUSTACHE_END", null);
-  IElementType MUSTACHE_START = new IElementType("MUSTACHE_START", null);
-  IElementType NULL = new IElementType("NULL", null);
+  IElementType BLOCK_HELPER = new IElementType("BLOCK_HELPER", null);
+  IElementType BOOLEAN = new IElementType("BOOLEAN", null);
+  IElementType CLOSE = new IElementType("CLOSE", null);
+  IElementType CLOSE_BLOCK = new IElementType("CLOSE_BLOCK", null);
+  IElementType CLOSE_RAW_BLOCK = new IElementType("CLOSE_RAW_BLOCK", null);
+  IElementType CLOSE_SEXPR = new IElementType("CLOSE_SEXPR", null);
+  IElementType COMMENT = new IElementType("COMMENT", null);
+  IElementType COMMENT_CLOSE = new IElementType("COMMENT_CLOSE", null);
+  IElementType COMMENT_CONTENT = new IElementType("COMMENT_CONTENT", null);
+  IElementType COMMENT_OPEN = new IElementType("COMMENT_OPEN", null);
+  IElementType CONTENT = new IElementType("CONTENT", null);
+  IElementType DATA_PREFIX = new IElementType("DATA_PREFIX", null);
+  IElementType EXPR_COMPONENT = new IElementType("EXPR_COMPONENT", null);
+  IElementType EXPR_CONTENTS = new IElementType("EXPR_CONTENTS", null);
+  IElementType ID = new IElementType("ID", null);
   IElementType NUMBER = new IElementType("NUMBER", null);
-  IElementType OBJECT_END = new IElementType("OBJECT_END", null);
-  IElementType OBJECT_START = new IElementType("OBJECT_START", null);
-  IElementType OPEN_BRACE = new IElementType("OPEN_BRACE", null);
-  IElementType OPEN_PAREN = new IElementType("OPEN_PAREN", null);
-  IElementType PIPE = new IElementType("PIPE", null);
-  IElementType PIPE_CHAIN = new IElementType("PIPE_CHAIN", null);
-  IElementType SINGLE_QUOTE = new IElementType("SINGLE_QUOTE", null);
+  IElementType OPEN = new IElementType("OPEN", null);
+  IElementType OPEN_BLOCK = new IElementType("OPEN_BLOCK", null);
+  IElementType OPEN_PARTIAL = new IElementType("OPEN_PARTIAL", null);
+  IElementType OPEN_RAW_BLOCK = new IElementType("OPEN_RAW_BLOCK", null);
+  IElementType OPEN_SEXPR = new IElementType("OPEN_SEXPR", null);
+  IElementType PARTIAL = new IElementType("PARTIAL", null);
+  IElementType RAW_BLOCK = new IElementType("RAW_BLOCK", null);
+  IElementType ROOT_ITEM = new IElementType("ROOT_ITEM", null);
+  IElementType SIMPLE_EXPR = new IElementType("SIMPLE_EXPR", null);
   IElementType STRING = new IElementType("STRING", null);
-  IElementType TEMPLATE_END = new IElementType("TEMPLATE_END", null);
-  IElementType TEMPLATE_START = new IElementType("TEMPLATE_START", null);
-  IElementType TRUE = new IElementType("TRUE", null);
+
+  IElementType EXPR = new IElementType("expr", null);
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == ARGS) {
-        return new SharpScriptArgsImpl(node);
+      if (type == BLOCK_HELPER) {
+        return new SharpScriptBlockHelperImpl(node);
       }
-      else if (type == ARRAY) {
-        return new SharpScriptArrayImpl(node);
+      else if (type == BOOLEAN) {
+        return new SharpScriptBooleanImpl(node);
       }
-      else if (type == ASSIGNMENT) {
-        return new SharpScriptAssignmentImpl(node);
+      else if (type == CLOSE) {
+        return new SharpScriptCloseImpl(node);
       }
-      else if (type == ELEMENT) {
-        return new SharpScriptElementImpl(node);
+      else if (type == CLOSE_BLOCK) {
+        return new SharpScriptCloseBlockImpl(node);
       }
-      else if (type == EXPR) {
-        return new SharpScriptExprImpl(node);
+      else if (type == CLOSE_RAW_BLOCK) {
+        return new SharpScriptCloseRawBlockImpl(node);
       }
-      else if (type == EXPRESSION_INSIDE) {
-        return new SharpScriptExpressionInsideImpl(node);
+      else if (type == CLOSE_SEXPR) {
+        return new SharpScriptCloseSexprImpl(node);
       }
-      else if (type == JS_LITERAL) {
-        return new SharpScriptJsLiteralImpl(node);
+      else if (type == COMMENT) {
+        return new SharpScriptCommentImpl(node);
       }
-      else if (type == METHOD_CALL) {
-        return new SharpScriptMethodCallImpl(node);
+      else if (type == COMMENT_CLOSE) {
+        return new SharpScriptCommentCloseImpl(node);
       }
-      else if (type == METHOD_CHAIN) {
-        return new SharpScriptMethodChainImpl(node);
+      else if (type == COMMENT_CONTENT) {
+        return new SharpScriptCommentContentImpl(node);
       }
-      else if (type == METHOD_NAME) {
-        return new SharpScriptMethodNameImpl(node);
+      else if (type == COMMENT_OPEN) {
+        return new SharpScriptCommentOpenImpl(node);
       }
-      else if (type == MUSTACHE_EXPR) {
-        return new SharpScriptMustacheExprImpl(node);
+      else if (type == CONTENT) {
+        return new SharpScriptContentImpl(node);
       }
-      else if (type == OBJECT) {
-        return new SharpScriptObjectImpl(node);
+      else if (type == DATA_PREFIX) {
+        return new SharpScriptDataPrefixImpl(node);
       }
-      else if (type == SHARP_SCRIPT_INSIDE) {
-        return new SharpScriptSharpScriptInsideImpl(node);
+      else if (type == EXPR_COMPONENT) {
+        return new SharpScriptExprComponentImpl(node);
       }
-      else if (type == SHORTHAND_ARROW_EXPR) {
-        return new SharpScriptShorthandArrowExprImpl(node);
+      else if (type == EXPR_CONTENTS) {
+        return new SharpScriptExprContentsImpl(node);
       }
-      else if (type == SHORTHAND_NOTATION) {
-        return new SharpScriptShorthandNotationImpl(node);
+      else if (type == ID) {
+        return new SharpScriptIdImpl(node);
       }
-      else if (type == TARGET) {
-        return new SharpScriptTargetImpl(node);
+      else if (type == NUMBER) {
+        return new SharpScriptNumberImpl(node);
       }
-      else if (type == TEMPLATE_LITERAL) {
-        return new SharpScriptTemplateLiteralImpl(node);
+      else if (type == OPEN) {
+        return new SharpScriptOpenImpl(node);
+      }
+      else if (type == OPEN_BLOCK) {
+        return new SharpScriptOpenBlockImpl(node);
+      }
+      else if (type == OPEN_PARTIAL) {
+        return new SharpScriptOpenPartialImpl(node);
+      }
+      else if (type == OPEN_RAW_BLOCK) {
+        return new SharpScriptOpenRawBlockImpl(node);
+      }
+      else if (type == OPEN_SEXPR) {
+        return new SharpScriptOpenSexprImpl(node);
+      }
+      else if (type == PARTIAL) {
+        return new SharpScriptPartialImpl(node);
+      }
+      else if (type == RAW_BLOCK) {
+        return new SharpScriptRawBlockImpl(node);
+      }
+      else if (type == ROOT_ITEM) {
+        return new SharpScriptRootItemImpl(node);
+      }
+      else if (type == SIMPLE_EXPR) {
+        return new SharpScriptSimpleExprImpl(node);
+      }
+      else if (type == STRING) {
+        return new SharpScriptStringImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

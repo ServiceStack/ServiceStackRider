@@ -29,42 +29,43 @@ public class SharpScriptSyntaxHighlighter extends SyntaxHighlighterBase {
         TextAttributesKey[] keys = null;
         LOG.info("getTokenHighlights called for tokenType: " + tokenType.toString());
 
-        if (tokenType.equals(FAT_ARROW)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.OPERATION_SIGN};
-        }
-        else if (tokenType.equals(MUSTACHE_START) || tokenType.equals(MUSTACHE_END)) {
+        if (tokenType.equals(OPEN) || tokenType.equals(CLOSE)) {
             keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.BRACKETS};
         }
-        else if (tokenType.equals(PIPE) || tokenType.equals(PIPE_CHAIN)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.SEMICOLON};
+        else if (tokenType.equals(OPEN_BLOCK) || tokenType.equals(CLOSE_BLOCK)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.BRACKETS};
         }
-        else if (tokenType.equals(IDENTIFIER)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.IDENTIFIER};
+        else if (tokenType.equals(OPEN_PARTIAL)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.METADATA};
         }
-        else if (tokenType.equals(NUMBER) || tokenType.equals(TRUE) || tokenType.equals(NULL)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.NUMBER};
+        else if (tokenType.equals(COMMENT_OPEN) || tokenType.equals(COMMENT_CLOSE)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.LINE_COMMENT};
+        }
+        else if (tokenType.equals(OPEN_RAW_BLOCK) || tokenType.equals(CLOSE_RAW_BLOCK)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.BRACES};
+        }
+        else if (tokenType.equals(ID)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.CLASS_NAME};
         }
         else if (tokenType.equals(STRING)) {
             keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.STRING};
         }
-        else if (tokenType.equals(OBJECT_START) || tokenType.equals(OBJECT_END) ||
-                tokenType.equals(ARRAY_START) || tokenType.equals(ARRAY_END)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.BRACES};
+        else if (tokenType.equals(NUMBER)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.NUMBER};
         }
-        else if (tokenType.equals(TEMPLATE_START) || tokenType.equals(TEMPLATE_END)) {
-            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.METADATA};
-        }
-        else if (tokenType.equals(EXPRESSION_TOKEN) || tokenType.equals(HASHTAG) ||
-                tokenType.equals(OPEN_PAREN) || tokenType.equals(CLOSE_PAREN) ||
-                tokenType.equals(OPEN_BRACE) || tokenType.equals(CLOSE_BRACE) ||
-                tokenType.equals(ARROW) || tokenType.equals(SINGLE_QUOTE)) {
+        else if (tokenType.equals(BOOLEAN)) {
             keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.KEYWORD};
         }
-
-
+        else if (tokenType.equals(DATA_PREFIX)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL};
+        }
+        else if (tokenType.equals(OPEN_SEXPR) || tokenType.equals(CLOSE_SEXPR)) {
+            keys = new TextAttributesKey[]{DefaultLanguageHighlighterColors.PARENTHESES};
+        }
 
         if (keys == null) return new TextAttributesKey[0];
         return keys;
     }
+
 
 }

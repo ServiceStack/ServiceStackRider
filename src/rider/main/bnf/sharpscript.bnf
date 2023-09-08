@@ -5,78 +5,55 @@
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="SharpScript"
-
   psiImplClassSuffix="Impl"
+  psiPackage="net.servicestack.idea.sharpscript.psi"
+  psiImplPackage="net.servicestack.idea.sharpscript.psi.impl"
 }
 
+// Entry point
+sharp_script ::= root_item*
 
-sharpScriptFile ::= element*
+root_item ::= content | simple_expr | block_helper | partial | comment | raw_block
 
-element ::= mustacheExpr
-          | methodCall
-          | methodChain
-          | jsLiteral
-          | shorthandNotation
-          | assignment
-          | templateLiteral
-          | shorthandArrowExpr
+// Handle content
+content ::= CONTENT
 
-array ::= ARRAY_START expr ARRAY_END
+// Simple expressions
+simple_expr ::= OPEN expr CLOSE
 
-object ::= OBJECT_START assignment (',' assignment)* OBJECT_END
+// Expression blocks
+block_helper ::= OPEN_BLOCK expr_contents CLOSE_BLOCK
+expr_contents ::= expr_component*
 
+expr_component ::= id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR
 
+// Define partials
+partial ::= OPEN_PARTIAL id CLOSE
 
-// Mustache expressions
-mustacheExpr ::= MUSTACHE_START sharpScriptInside MUSTACHE_END
+// Comments
+comment ::= COMMENT_OPEN COMMENT_CONTENT? COMMENT_CLOSE
 
+// Raw blocks
+raw_block ::= OPEN_RAW_BLOCK CONTENT CLOSE_RAW_BLOCK
 
-expr ::= EXPRESSION_TOKEN
+// Terminal elements
+CONTENT ::= 'content'
+OPEN ::= '{{'
+CLOSE ::= '}}'
+OPEN_BLOCK ::= '{{#'
+CLOSE_BLOCK ::= '}}'
+OPEN_PARTIAL ::= '{{>'
+COMMENT_OPEN ::= '{{!--'
+COMMENT_CLOSE ::= '--}}'
+COMMENT_CONTENT ::= 'comment_content'
+OPEN_RAW_BLOCK ::= '{{{{'
+CLOSE_RAW_BLOCK ::= '}}}}'
+ID ::= 'id'
+STRING ::= 'string'
+NUMBER ::= 'number'
+BOOLEAN ::= 'boolean'
+DATA_PREFIX ::= '@'
+OPEN_SEXPR ::= '('
+CLOSE_SEXPR ::= ')'
 
-// Method calls and chaining
-methodCall ::= methodName '(' args ')'
-methodName ::= IDENTIFIER
-args       ::= expr (',' expr)*
-
-methodChain ::= expr PIPE methodCall (PIPE methodCall)*
-
-// JavaScript literals
-jsLiteral ::= NULL
-            | TRUE
-            | NUMBER
-            | STRING
-            | ARRAY
-            | OBJECT
-
-
-sharpScriptInside ::=  expressionInside (HASHTAG expressionInside)*
-                     | expressionInside (PIPE_CHAIN expressionInside)*
-                     | expressionInside (OPEN_PAREN expressionInside CLOSE_PAREN)*
-                     | expressionInside (OPEN_BRACE expressionInside CLOSE_BRACE)*
-                     | expressionInside (ARROW expressionInside)*
-                     | expressionInside (SINGLE_QUOTE expressionInside SINGLE_QUOTE)*
-
-expressionInside ::= IDENTIFIER
-                   | STRING
-                   | NUMBER
-                   | PIPE_CHAIN
-                   | HASHTAG
-                   | OPEN_PAREN expressionInside CLOSE_PAREN
-                   | OPEN_BRACE expressionInside CLOSE_BRACE
-                   | ARROW
-
-// ES6 shorthand notation
-shorthandNotation ::= 'var' IDENTIFIER '=' expr
-
-// Assignment expressions
-assignment ::= target '=' expr
-target     ::= IDENTIFIER
-             | IDENTIFIER '[' expr ']'
-             | IDENTIFIER '.' IDENTIFIER
-
-
-// Template literals
-templateLiteral ::= TEMPLATE_START expr TEMPLATE_END
-
-// Shorthand arrow expressions
-shorthandArrowExpr ::= expr PIPE methodName FAT_ARROW expr
+// Additional definitions based on your HandleBars.flex rules can go here.
