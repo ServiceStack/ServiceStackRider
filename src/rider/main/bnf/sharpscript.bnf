@@ -1,0 +1,65 @@
+{
+  parserClass="net.servicestack.idea.sharpscript.SharpScriptParser"
+  parserUtilClass="net.servicestack.idea.sharpscript.SharpScriptParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="SharpScript"
+  psiImplClassSuffix="Impl"
+  psiPackage="net.servicestack.idea.sharpscript.psi"
+  psiImplPackage="net.servicestack.idea.sharpscript.psi.impl"
+}
+
+// Entry point
+sharp_script ::= root_item*
+
+root_item ::= content | simple_expr | block_helper | partial | comment | raw_block
+
+// Handle content
+content ::= CONTENT
+
+// Simple expressions
+simple_expr ::= OPEN expr CLOSE
+
+// Expression blocks
+block_helper ::= OPEN_BLOCK expr_contents CLOSE_BLOCK
+expr_contents ::= expr_component*
+
+expr_component ::= id | STRING | NUMBER | BOOLEAN | DATA_PREFIX | OPEN_SEXPR CLOSE_SEXPR | backtick_expr
+
+// New rule for backtick expression
+backtick_expr ::= BACKTICK_OPEN BACKTICK_CONTENT* BACKTICK_CLOSE
+
+
+// Define partials
+partial ::= OPEN_PARTIAL id CLOSE
+
+// Comments
+comment ::= COMMENT_OPEN COMMENT_CONTENT? COMMENT_CLOSE
+
+// Raw blocks
+raw_block ::= OPEN_RAW_BLOCK CONTENT CLOSE_RAW_BLOCK
+
+
+// Terminal elements
+CONTENT ::= 'content'
+OPEN ::= '{{'
+CLOSE ::= '}}'
+OPEN_BLOCK ::= '{{#'
+CLOSE_BLOCK ::= '}}'
+OPEN_PARTIAL ::= '{{>'
+COMMENT_OPEN ::= '{{!--'
+COMMENT_CLOSE ::= '--}}'
+COMMENT_CONTENT ::= 'comment_content'
+OPEN_RAW_BLOCK ::= '{{{{'
+CLOSE_RAW_BLOCK ::= '}}}}'
+ID ::= 'id'
+STRING ::= 'string'
+NUMBER ::= 'number'
+BOOLEAN ::= 'boolean'
+DATA_PREFIX ::= '@'
+OPEN_SEXPR ::= '('
+CLOSE_SEXPR ::= ')'
+
+
+// Additional definitions based on your HandleBars.flex rules can go here.
