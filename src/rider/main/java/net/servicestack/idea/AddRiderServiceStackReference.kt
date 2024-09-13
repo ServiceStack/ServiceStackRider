@@ -3,19 +3,17 @@ package net.servicestack.idea
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.LangDataKeys
-import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiFile
 import com.jetbrains.rider.actions.base.RiderAnAction
 import net.servicestack.idea.common.IDEAUtils
 import net.servicestack.idea.common.INativeTypesHandler
 import java.io.File
 
-class AddRiderAction : RiderAnAction(
-    "AddRiderAction",
+class AddRiderServiceStackReference : RiderAnAction(
+    "AddRiderServiceStackReference",
     "ServiceStack Reference...",
     "Adds a ServiceStack reference to the selected module"
-), DumbAware {
+) {
     override fun actionPerformed(e: AnActionEvent) {
         val contextFile = e.dataContext.getData(CommonDataKeys.VIRTUAL_FILE) as VirtualFile
         val dir: String = if (contextFile.isDirectory)
@@ -73,6 +71,11 @@ class AddRiderAction : RiderAnAction(
 
         dialog.nativeTypesHandler = nativeTypeHandler
         dialog.isVisible = true
+    }
+
+    override fun update(e: AnActionEvent) {
+        // Set visibility here
+        e.presentation.isEnabledAndVisible = true
     }
 
     fun dialogOk(e: AnActionEvent) {

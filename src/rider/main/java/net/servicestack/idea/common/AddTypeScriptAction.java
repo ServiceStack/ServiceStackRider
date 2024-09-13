@@ -1,5 +1,6 @@
 package net.servicestack.idea.common;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -38,17 +39,14 @@ public class AddTypeScriptAction extends AnAction {
     }
 
     @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
+    }
+
+    @Override
     public void update(@NotNull AnActionEvent e) {
         Module module = getModule(e);
-        if (module == null) {
-            e.getPresentation().setEnabled(false);
-        }
-        // If the plugin is installed, make visible.
-        // since Typescript/web is common development
-        // to variable languages/platforms.
-        e.getPresentation().setVisible(true);
-
-        super.update(e);
+        e.getPresentation().setEnabledAndVisible(module != null);
     }
 
     static Module getModule(Project project) {
