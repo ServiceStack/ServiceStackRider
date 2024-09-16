@@ -1,9 +1,11 @@
 package net.servicestack.idea.common;
 
+import com.intellij.concurrency.ThreadContext;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -35,7 +37,9 @@ public class AddTypeScriptAction extends AnAction {
     }
 
     private void showDialog(AddTypeScriptRef dialog) {
-        dialog.setVisible(true);
+        try (AccessToken token = ThreadContext.resetThreadContext()) {
+            dialog.setVisible(true);
+        }
     }
 
     @Override

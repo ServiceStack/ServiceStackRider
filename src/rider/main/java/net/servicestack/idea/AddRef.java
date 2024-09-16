@@ -2,6 +2,7 @@ package net.servicestack.idea;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.JBColor;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -18,7 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Locale;
 
-public class AddRef extends JDialog {
+public class AddRef extends JDialog  {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;

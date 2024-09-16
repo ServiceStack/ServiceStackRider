@@ -1,10 +1,11 @@
 // Reference https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/gradle_guide.html
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.jetbrains.intellij.tasks.PrepareSandboxTask
 
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
-    id 'org.jetbrains.intellij' version '1.14.2'     // See https://github.com/JetBrains/gradle-intellij-plugin/releases
+    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
+    id 'org.jetbrains.intellij' version '1.17.3'     // See https://github.com/JetBrains/gradle-intellij-plugin/releases
     id 'com.jetbrains.rdgen' version '2024.1.1'      // See https://github.com/JetBrains/rd/releases
     id 'me.filippov.gradle.jvm.wrapper' version '0.14.0'
 }
@@ -22,12 +23,16 @@ repositories {
 }
 
 wrapper {
-    gradleVersion = '7.6.1'
+    gradleVersion = '7.6'
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl = "https://cache-redirector.jetbrains.com/services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 version = ext.PluginVersion
+
+tasks.named("processResources") {
+    from("dependencies.json", { into "META-INF" })
+}
 
 sourceSets {
     main {
@@ -35,30 +40,37 @@ sourceSets {
         kotlin.srcDir 'src/rider/main/kotlin'
         resources.srcDir 'src/rider/main/resources'
     }
+    test {
+        kotlin.srcDir 'src/rider/test/kotlin'
+    }
 }
 
 compileKotlin {
-
+    kotlinOptions { jvmTarget = "17" }
 }
 
 task setBuildTool {
     doLast {
-        ext.args = []
-        ByteArrayOutputStream stdout = new ByteArrayOutputStream()
+        ext.executable = "dotnet"
+        ext.args = ["msbuild"]
+
         if (isWindows) {
+            ByteArrayOutputStream stdout = new ByteArrayOutputStream()
             exec {
                 executable "${rootDir}\\tools\\vswhere.exe"
                 args '-latest','-property','installationPath','-products','*'
                 standardOutput = stdout
                 workingDir rootDir
             }
-            List<String> files = new FileNameFinder().getFileNames("${stdout.toString().trim()}\\MSBuild", "**/MSBuild.exe")
-            ext.executable = files.get(0)
-            ext.args << "/v:minimal"
-        } else {
-            ext.executable = "dotnet"
-            ext.args << "msbuild"
+
+            def directory = stdout.toString().trim()
+            if (directory) {
+                List<String> files = new FileNameFinder().getFileNames("${directory}\\MSBuild", "**/MSBuild.exe")
+                ext.executable = files.get(0)
+                ext.args = ["/v:minimal"]
+            }
         }
+
         ext.args << "${DotnetSolution}"
         ext.args << "/p:Configuration=${BuildConfiguration}"
         ext.args << "/p:HostFullIdentifier="
@@ -69,10 +81,20 @@ task compileDotNet {
     dependsOn setBuildTool
     doLast {
         def arguments = setBuildTool.args.clone()
-        arguments << "/t:Restore;Build"
+        arguments << "/t:Restore;Rebuild"
         exec {
             executable setBuildTool.executable
             args arguments
+            workingDir rootDir
+        }
+    }
+}
+
+task testDotNet {
+    doLast {
+        exec {
+            executable "dotnet"
+            args "test","${DotnetSolution}","--logger","GitHubActions"
             workingDir rootDir
         }
     }
@@ -110,9 +132,8 @@ intellij {
     version = "${ProductVersion}"
     downloadSources = false
     instrumentCode = false
-    updateSinceUntilBuild = false
     // TODO: add plugins
-    // plugins("uml", "com.jetbrains.ChooseRuntime:1.0.9")
+    // plugins = ["uml", "com.jetbrains.ChooseRuntime:1.0.9"]
 }
 
 runIde {
@@ -124,13 +145,13 @@ runIde {
     autoReloadPlugins = false
 
     // gradle-intellij-plugin will download the default version of the JBR for the snapshot. Update if required
-    // jbrVersion("jbr_jcef-11_0_6b765.40") // https://confluence.jetbrains.com/display/JBR/Release+notes
+    // jbrVersion = "jbr_jcef-11_0_6b765.40" // https://confluence.jetbrains.com/display/JBR/Release+notes
 }
 
 rdgen {
     def modelDir = new File(rootDir, "protocol/src/main/kotlin/model")
     def csOutput = new File(rootDir, "src/dotnet/${DotnetPluginId}/Rider")
-    def ktOutput = new File(rootDir, "src/rider/main/kotlin/com/jetbrains/rider/plugins/${RiderPluginId.replace('.','/').toLowerCase()}")
+    def ktOutput = new File(rootDir, "src/rider/main/kotlin/${RiderPluginId.replace('.','/').toLowerCase()}")
 
     verbose = true
     classpath {
@@ -157,6 +178,15 @@ rdgen {
     }
 }
 
+test {
+    useTestNG()
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+    environment["LOCAL_ENV_RUN"] = "true"
+}
+
 patchPluginXml {
     // TODO: See also org.jetbrains.changelog: https://github.com/JetBrains/gradle-changelog-plugin
     def changelogText = file("${rootDir}/CHANGELOG.md").text
@@ -165,12 +195,9 @@ patchPluginXml {
     changeNotes = changelogMatches.collect {
         it[1].replaceAll(/(?s)\r?\n/, "<br />\n")
     }.take(1).join('')
-
-    sinceBuild = "242"
-
 }
 
-prepareSandbox {
+tasks.withType(PrepareSandboxTask).configureEach {
     dependsOn compileDotNet
 
     def outputFolder = "${rootDir}/src/dotnet/${DotnetPluginId}/bin/${DotnetPluginId}.Rider/${BuildConfiguration}"
@@ -182,7 +209,7 @@ prepareSandbox {
 
     dllFiles.forEach({ f ->
         def file = file(f)
-        from(file, { into "${intellij.pluginName}/dotnet" })
+        from(file, { into "${rootProject.name}/dotnet" })
     })
 
     doLast {
@@ -194,13 +221,14 @@ prepareSandbox {
 }
 
 publishPlugin {
+    dependsOn testDotNet
     dependsOn buildPlugin
     token = "${PublishToken}"
 
     doLast {
         exec {
             executable "dotnet"
-            args "nuget","push","output/${DotnetPluginId}.${version}.nupkg","--api-key",token,"--source","https://plugins.jetbrains.com"
+            args "nuget","push","output/${DotnetPluginId}.${version}.nupkg","--api-key","${PublishToken}","--source","https://plugins.jetbrains.com"
             workingDir rootDir
         }
     }

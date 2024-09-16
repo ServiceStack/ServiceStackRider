@@ -1,12 +1,12 @@
 <Project>
 
   <PropertyGroup>
-    <SdkVersion>2021.1.1</SdkVersion>
+    <SdkVersion>2024.1.1</SdkVersion>
 
     <Title>ServiceStack</Title>
     <Description>Description</Description>
 
-    <Authors>Author</Authors>
+    <Authors>ServiceStack</Authors>
     <Copyright>Copyright $([System.DateTime]::Now.Year) Maintainers of ServiceStack</Copyright>
     <PackageTags>resharper plugin</PackageTags>
 

@@ -1,5 +1,7 @@
 package net.servicestack.idea
 
+import com.intellij.concurrency.resetThreadContext
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.LangDataKeys
@@ -70,12 +72,18 @@ class AddRiderServiceStackReference : RiderAnAction(
         )
 
         dialog.nativeTypesHandler = nativeTypeHandler
-        dialog.isVisible = true
+        resetThreadContext().use { _ ->
+            dialog.isVisible = true
+        }
     }
 
     override fun update(e: AnActionEvent) {
         // Set visibility here
         e.presentation.isEnabledAndVisible = true
+    }
+
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.EDT
     }
 
     fun dialogOk(e: AnActionEvent) {
