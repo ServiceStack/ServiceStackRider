@@ -8,8 +8,8 @@ using JetBrains.ReSharper.Psi.Files;
 
 namespace ReSharperPlugin.ServiceStack
 {
-    [Action("AddRiderAction", "ServiceStack Reference...")]
-    public class AddRiderAction : IActionWithExecuteRequirement, IExecutableAction
+    [Action("AddRiderServiceStackReference", "ServiceStack Reference...")]
+    public class AddRiderServiceStackReference : IActionWithExecuteRequirement, IExecutableAction
     {
         public IActionRequirement GetRequirement(IDataContext dataContext)
         {

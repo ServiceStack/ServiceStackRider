@@ -6,10 +6,7 @@ import org.apache.http.client.utils.URIBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +26,7 @@ public abstract class BaseNativeTypesHandler implements INativeTypesHandler {
 
         url = urlBuilder.build().toString();
 
-        URL serviceUrl = new URL(url);
+        URL serviceUrl = URI.create(url).toURL();
         URLConnection javaResponseConnection = serviceUrl.openConnection();
         BufferedReader javaResponseReader = new BufferedReader(
                 new InputStreamReader(
@@ -48,7 +45,7 @@ public abstract class BaseNativeTypesHandler implements INativeTypesHandler {
     public URIBuilder getUrl(String baseUrl) throws MalformedURLException, URISyntaxException {
         String serverUrl = baseUrl.endsWith("/") ? baseUrl : (baseUrl + "/");
         serverUrl = (serverUrl.startsWith("http://") || serverUrl.startsWith("https://")) ? serverUrl : ("http://" + serverUrl);
-        URL url = new URL(serverUrl);
+        URL url = URI.create(serverUrl).toURL();
         String path = url.getPath().contains("?") ? url.getPath().split("\\?", 2)[0] : url.getPath();
         if (!path.endsWith(this.getRelativeTypesUrl() + "/")) {
             serverUrl += (this.getRelativeTypesUrl() + "/");

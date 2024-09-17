@@ -2,11 +2,11 @@ package net.servicestack.idea;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.JBColor;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.jetbrains.rider.actions.base.RiderAnAction;
 import net.servicestack.idea.common.IDEAUtils;
 import net.servicestack.idea.common.INativeTypesHandler;
 
@@ -19,7 +19,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Locale;
 
-public class AddRef extends JDialog {
+public class AddRef extends JDialog  {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -28,7 +28,7 @@ public class AddRef extends JDialog {
     private JTextField addressUrlTextField;
     private JTextField nameTextField;
 
-    private AddRiderAction riderAnAction;
+    private AddRiderServiceStackReference riderAnAction;
     private AnActionEvent actionEvent;
 
     INativeTypesHandler nativeTypesHandler;
@@ -38,7 +38,7 @@ public class AddRef extends JDialog {
 
     private Module module;
 
-    public AddRef(Module module, AddRiderAction riderAnAction, AnActionEvent actionEvent) {
+    public AddRef(Module module, AddRiderServiceStackReference riderAnAction, AnActionEvent actionEvent) {
         this.module = module;
         this.riderAnAction = riderAnAction;
         this.actionEvent = actionEvent;
@@ -63,11 +63,11 @@ public class AddRef extends JDialog {
                     text = ((JTextField) input).getText();
                 }
 
-                return text != null && text.length() > 0;
+                return text != null && !text.isEmpty();
             }
 
             @Override
-            public boolean shouldYieldFocus(JComponent input) {
+            public boolean shouldYieldFocus(JComponent input, JComponent target) {
                 boolean valid = verify(input);
                 if (!valid) {
                     errorMessage = "URL Address is required";
@@ -86,11 +86,11 @@ public class AddRef extends JDialog {
                     text = ((JTextField) input).getText();
                 }
 
-                return text != null && text.length() > 0;
+                return text != null && !text.isEmpty();
             }
 
             @Override
-            public boolean shouldYieldFocus(JComponent input) {
+            public boolean shouldYieldFocus(JComponent input, JComponent target) {
                 boolean valid = verify(input);
                 if (!valid) {
                     errorMessage = "A file name is required.";
@@ -246,7 +246,7 @@ public class AddRef extends JDialog {
         if (infoTextPaneFont != null) infoTextPane.setFont(infoTextPaneFont);
         infoTextPane.setOpaque(false);
         infoTextPane.setRequestFocusEnabled(false);
-        infoTextPane.setText("To generate the DTO Service Model types for a specific ServiceStack instance, enter the base URI for the remote ServiceStack server and click OK.");
+        infoTextPane.setText("To generate the DTO Service Model types for a specific ServiceStack instance, enter the base URI for the remote ServiceStack server and click OK...");
         panel3.add(infoTextPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(150, 25), null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
@@ -295,5 +295,4 @@ public class AddRef extends JDialog {
     public JComponent $$$getRootComponent$$$() {
         return contentPane;
     }
-
 }
