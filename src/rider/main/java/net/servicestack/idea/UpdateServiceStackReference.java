@@ -1,5 +1,6 @@
 package net.servicestack.idea;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -13,6 +14,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import net.servicestack.idea.common.INativeTypesHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Layoric on 9/04/2015.
@@ -31,6 +33,11 @@ public class UpdateServiceStackReference extends AnAction {
                 }
             });
         }
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 
     @Override
